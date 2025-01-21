@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:38:07 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/21 13:38:09 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/21 13:43:23 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,8 @@
 # define PIPEX_H
 
 #include "../libft/libft.h"
+
+#include <errno.h>
+#include <sys/wait.h>
 
 #endif

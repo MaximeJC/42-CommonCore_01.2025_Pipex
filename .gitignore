@@ -1,0 +1,5 @@
+obj/
+*.a
+*.o
+*.out
+pipex

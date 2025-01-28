@@ -3,3 +3,5 @@ obj/
 *.o
 *.out
 pipex
+input
+output

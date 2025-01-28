@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/28 10:59:48 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/28 11:09:47 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,14 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		fd_in = open(argv[1], O_RDONLY);								// * <
+		fd_out = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0777);		// * >
+		fd_in = open(argv[1], O_RDONLY);										// * <
 		if (fd_in < 0)
 		{
 			ft_putendl_fd("Pipex: Can't open input file!", 2);
-			exit(EXIT_FAILURE);
+			// close(fd_out);
+			// exit(EXIT_FAILURE);
 		}
-		fd_out = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0777);		// * >
 
 		//TODO Execute all commands one by one
 

@@ -6,13 +6,87 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/28 15:25:04 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/29 14:17:14 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int main(int argc, char *argv[])
+char	**check_path(char *envp[])
+{
+	int		i;
+	char	*path;
+	char	**paths;
+
+	i = 0;
+	path = NULL;
+	while (envp[i] != NULL)
+	{
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+		{
+			ft_printf("%s\n", envp[i]);
+			break ;
+		}
+		i++;
+	}
+	if (envp[i] == NULL)
+	{
+		ft_putendl_fd("Pipex: envp reading error", 2);
+		// exit(EXIT_FAILURE);
+		return (NULL);
+	}
+	path = ft_strdup(envp[i] + 5);
+	if (path == NULL)
+	{
+		ft_putendl_fd("Pipex: envp path duplication error", 2);
+		// exit(EXIT_FAILURE);
+		return (NULL);
+	}
+	ft_printf("%s\n", path);
+
+	paths = ft_split(path, ':');
+	if (paths == NULL)
+	{
+		free(path);
+		ft_putendl_fd("Pipex: envp path split error", 2);
+		return (NULL);
+	}
+	free(path);
+	return (paths);
+}
+
+int	main(int argc, char const *argv[], char *envp[])
+{
+	(void)argc;
+	(void)argv;
+	char	**paths;
+	char	**cmd1;
+	char	**cmd2;
+
+	paths = check_path(envp);
+	if (paths == NULL)
+		return 1;
+	cmd1 = ft_split(argv[2], ' ');
+	if (cmd1 == NULL)
+	{
+		//TODO Free paths
+		return (1);
+	}
+	cmd2 = ft_split(argv[3], ' ');
+	if (cmd2 == NULL)
+	{
+		//TODO Free paths
+		//TODO Free cmd1
+		return (1);
+	}
+}
+
+
+
+
+
+
+/* int main(int argc, char *argv[])
 {
 	int	pipefd[2];
 	int	fd_in;
@@ -35,7 +109,7 @@ int main(int argc, char *argv[])
 		close(fd_in);
 	close(fd_out);
 	return 0;
-}
+} */
 
 		//! Penser a free
 		//! Penser aux leaks

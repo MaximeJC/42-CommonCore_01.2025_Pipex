@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/29 16:19:13 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:41:37 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ int	main(int argc, char const *argv[], char *envp[])
 		//TODO Free cmd1
 		return (1);
 	}
-	ft_printf("%s - %s", cmd2[0], cmd2[1]);
+	ft_printf("%s - %s\n", cmd2[0], cmd2[1]);
+	ft_printf("%d", access("/usr/bin/ls", X_OK));
 }
 
 

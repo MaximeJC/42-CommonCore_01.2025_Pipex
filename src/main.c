@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/29 14:17:14 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:19:13 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ char	**check_path(char *envp[])
 	while (envp[i] != NULL)
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-		{
-			ft_printf("%s\n", envp[i]);
 			break ;
-		}
 		i++;
 	}
 	if (envp[i] == NULL)
@@ -42,8 +39,6 @@ char	**check_path(char *envp[])
 		// exit(EXIT_FAILURE);
 		return (NULL);
 	}
-	ft_printf("%s\n", path);
-
 	paths = ft_split(path, ':');
 	if (paths == NULL)
 	{
@@ -58,7 +53,6 @@ char	**check_path(char *envp[])
 int	main(int argc, char const *argv[], char *envp[])
 {
 	(void)argc;
-	(void)argv;
 	char	**paths;
 	char	**cmd1;
 	char	**cmd2;
@@ -67,18 +61,19 @@ int	main(int argc, char const *argv[], char *envp[])
 	if (paths == NULL)
 		return 1;
 	cmd1 = ft_split(argv[2], ' ');
-	if (cmd1 == NULL)
+	if (cmd1 == NULL || cmd1[0] == NULL)
 	{
 		//TODO Free paths
 		return (1);
 	}
 	cmd2 = ft_split(argv[3], ' ');
-	if (cmd2 == NULL)
+	if (cmd2 == NULL || cmd2[0] == NULL)
 	{
 		//TODO Free paths
 		//TODO Free cmd1
 		return (1);
 	}
+	ft_printf("%s - %s", cmd2[0], cmd2[1]);
 }
 
 

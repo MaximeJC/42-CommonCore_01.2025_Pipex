@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/30 13:40:42 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/30 13:58:23 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main(int argc, char const *argv[], char *envp[])
 		return 1;
 	get_cmd_args(argv[2], &data, 1);
 	get_cmd_args(argv[3], &data, 0);
-	ft_printf("%s - %s\n", data->rcmd_args[0], data->rcmd_args[1]);
+	ft_printf("%s - %s\n", data->lcmd_args[0], data->lcmd_args[1]);
 
 	int	size;
 
@@ -48,13 +48,7 @@ int	main(int argc, char const *argv[], char *envp[])
 	{
 		testcmd = ft_calloc(ft_strlen(env_paths[i]) + ft_strlen(data->lcmd_args[0]) + 2, sizeof(char));
 		if (testcmd == NULL)
-		{
-			ft_putendl_fd("Pipex: testcmd1 malloc error", 2);
-			//TODO Free paths
-			//TODO Free cmd1
-			//TODO Free cmd2
-			return (1);
-		}
+			error_handler("Pipex: testcmd1 malloc error", &data);
 		ft_strlcat(testcmd, env_paths[i], ft_strlen(testcmd) + ft_strlen(env_paths[i]) + 1);
 		ft_strlcat(testcmd, "/", ft_strlen(testcmd) + 2);
 		ft_strlcat(testcmd, data->lcmd_args[0], ft_strlen(testcmd) + ft_strlen(data->lcmd_args[0]) + 1);
@@ -63,12 +57,8 @@ int	main(int argc, char const *argv[], char *envp[])
 			data->lcmd_path = ft_strdup(testcmd);
 			if (data->lcmd_path == NULL)
 			{
-				ft_putendl_fd("Pipex: cmd1_path malloc error", 2);
 				free(testcmd);
-				//TODO Free paths
-				//TODO Free cmd1
-				//TODO Free cmd2
-				return (1);
+				error_handler("Pipex: cmd1_path malloc error", &data);
 			}
 			free(testcmd);
 			break;
@@ -76,6 +66,7 @@ int	main(int argc, char const *argv[], char *envp[])
 		free(testcmd);
 		i++;
 	}
+	// TODO Add verif si rien trouve => data->lcmd_path uninitialized (pour commande suivante)
 	ft_printf("%s (%d)\n", data->lcmd_path, access(data->lcmd_path, X_OK));
 }
 

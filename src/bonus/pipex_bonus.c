@@ -6,13 +6,13 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:52:20 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/28 10:52:33 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:22:43 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int main(int argc, char *argv[])
+/* int main(int argc, char *argv[])
 {
 	int	fd_out;
 	int	fd_in;
@@ -55,4 +55,4 @@ int main(int argc, char *argv[])
 		close(fd_in);
 	close(fd_out);
 	return 0;
-}
+} */

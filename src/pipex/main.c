@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/29 16:41:37 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/30 09:23:55 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +56,77 @@ int	main(int argc, char const *argv[], char *envp[])
 	char	**paths;
 	char	**cmd1;
 	char	**cmd2;
+	char	*testcmd;
+	char	*cmd1_path;
+	// char	*cmd2_path;
+	int		i;
 
+	i = 0;
+	testcmd = NULL;
+	cmd1_path = NULL;
+	// cmd2_path = NULL;
 	paths = check_path(envp);
 	if (paths == NULL)
 		return 1;
 	cmd1 = ft_split(argv[2], ' ');
 	if (cmd1 == NULL || cmd1[0] == NULL)
 	{
+		ft_putendl_fd("Pipex: cmd1 split error", 2);
 		//TODO Free paths
 		return (1);
 	}
 	cmd2 = ft_split(argv[3], ' ');
 	if (cmd2 == NULL || cmd2[0] == NULL)
 	{
+		ft_putendl_fd("Pipex: cmd2 split error", 2);
 		//TODO Free paths
 		//TODO Free cmd1
 		return (1);
 	}
 	ft_printf("%s - %s\n", cmd2[0], cmd2[1]);
-	ft_printf("%d", access("/usr/bin/ls", X_OK));
+
+	int	size;
+
+	size = 0;
+	while (paths[size] != NULL)
+	{
+		size++;
+	}
+
+	while (i < size)
+	{
+		testcmd = ft_calloc(ft_strlen(paths[i]) + ft_strlen(cmd1[0]) + 2, sizeof(char));
+		if (testcmd == NULL)
+		{
+			ft_putendl_fd("Pipex: testcmd1 malloc error", 2);
+			//TODO Free paths
+			//TODO Free cmd1
+			//TODO Free cmd2
+			return (1);
+		}
+		ft_strlcat(testcmd, paths[i], ft_strlen(testcmd) + ft_strlen(paths[i]) + 1);
+		ft_strlcat(testcmd, "/", ft_strlen(testcmd) + 2);
+		ft_strlcat(testcmd, cmd1[0], ft_strlen(testcmd) + ft_strlen(cmd1[0]) + 1);
+		if (access(testcmd, X_OK) == 0)
+		{
+			cmd1_path = ft_strdup(testcmd);
+			if (cmd1_path == NULL)
+			{
+				ft_putendl_fd("Pipex: cmd1_path malloc error", 2);
+				free(testcmd);
+				//TODO Free paths
+				//TODO Free cmd1
+				//TODO Free cmd2
+				return (1);
+			}
+			free(testcmd);
+			break;
+		}
+		free(testcmd);
+		i++;
+	}
+	ft_printf("%s (%d)\n", cmd1_path, access(cmd1_path, X_OK));
+	free(cmd1_path);
 }
 
 

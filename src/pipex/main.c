@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/30 13:58:23 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:34:20 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,37 +18,29 @@ int	main(int argc, char const *argv[], char *envp[])
 	char	**env_paths;
 	char	*testcmd;
 	int		i;
+	int		size;
 
 	if (argc < 5)
-		return (ft_putendl_fd("Pipex: Not enough arguments", 2));
+		error_handler("Pipex: Not enough arguments", NULL, NULL);
 	else if (argc > 5)
-		return (ft_putendl_fd("Pipex: Too much arguments", 2));
+		error_handler("Pipex: Too much arguments", NULL, NULL);
 	data = ft_calloc(1, sizeof(t_pipex));
 	if (data == NULL)
-		error_handler("Pipex: Data malloc error", NULL);
+		error_handler("Pipex: Data malloc error", NULL, NULL);
 	data_init(&data);
 	i = 0;
 	testcmd = NULL;
 	env_paths = get_env_path(envp);
-	if (env_paths == NULL)
-		return 1;
-	get_cmd_args(argv[2], &data, 1);
-	get_cmd_args(argv[3], &data, 0);
-	ft_printf("%s - %s\n", data->lcmd_args[0], data->lcmd_args[1]);
+	get_cmd_args(argv[2], &data, env_paths, 1);
+	get_cmd_args(argv[3], &data, env_paths, 0);
+	size = ft_strtab_size(env_paths);
 
-	int	size;
-
-	size = 0;
-	while (env_paths[size] != NULL)
-	{
-		size++;
-	}
-
+	// TODO verif if absolute path
 	while (i < size)
 	{
 		testcmd = ft_calloc(ft_strlen(env_paths[i]) + ft_strlen(data->lcmd_args[0]) + 2, sizeof(char));
 		if (testcmd == NULL)
-			error_handler("Pipex: testcmd1 malloc error", &data);
+			error_handler("Pipex: testcmd1 malloc error", &data, env_paths);
 		ft_strlcat(testcmd, env_paths[i], ft_strlen(testcmd) + ft_strlen(env_paths[i]) + 1);
 		ft_strlcat(testcmd, "/", ft_strlen(testcmd) + 2);
 		ft_strlcat(testcmd, data->lcmd_args[0], ft_strlen(testcmd) + ft_strlen(data->lcmd_args[0]) + 1);
@@ -58,7 +50,7 @@ int	main(int argc, char const *argv[], char *envp[])
 			if (data->lcmd_path == NULL)
 			{
 				free(testcmd);
-				error_handler("Pipex: cmd1_path malloc error", &data);
+				error_handler("Pipex: cmd1_path malloc error", &data, env_paths);
 			}
 			free(testcmd);
 			break;
@@ -67,7 +59,10 @@ int	main(int argc, char const *argv[], char *envp[])
 		i++;
 	}
 	// TODO Add verif si rien trouve => data->lcmd_path uninitialized (pour commande suivante)
-	ft_printf("%s (%d)\n", data->lcmd_path, access(data->lcmd_path, X_OK));
+	if (data->lcmd_path != NULL)
+		ft_printf("%s (%d)\n", data->lcmd_path, access(data->lcmd_path, X_OK));
+	else
+		error_handler("Pipex: command not found", &data, env_paths);
 }
 
 

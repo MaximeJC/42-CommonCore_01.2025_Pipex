@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/30 11:02:20 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/30 13:40:42 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,40 +16,25 @@ int	main(int argc, char const *argv[], char *envp[])
 {
 	t_pipex	*data;
 	char	**env_paths;
-	char	**cmd1;
-	char	**cmd2;
 	char	*testcmd;
-	char	*cmd1_path;
 	int		i;
 
 	if (argc < 5)
 		return (ft_putendl_fd("Pipex: Not enough arguments", 2));
 	else if (argc > 5)
 		return (ft_putendl_fd("Pipex: Too much arguments", 2));
+	data = ft_calloc(1, sizeof(t_pipex));
+	if (data == NULL)
+		error_handler("Pipex: Data malloc error", NULL);
 	data_init(&data);
 	i = 0;
 	testcmd = NULL;
-	cmd1_path = NULL;
-	// cmd2_path = NULL;
 	env_paths = get_env_path(envp);
 	if (env_paths == NULL)
 		return 1;
-	cmd1 = ft_split(argv[2], ' ');
-	if (cmd1 == NULL || cmd1[0] == NULL)
-	{
-		ft_putendl_fd("Pipex: cmd1 split error", 2);
-		//TODO Free paths
-		return (1);
-	}
-	cmd2 = ft_split(argv[3], ' ');
-	if (cmd2 == NULL || cmd2[0] == NULL)
-	{
-		ft_putendl_fd("Pipex: cmd2 split error", 2);
-		//TODO Free paths
-		//TODO Free cmd1
-		return (1);
-	}
-	ft_printf("%s - %s\n", cmd2[0], cmd2[1]);
+	get_cmd_args(argv[2], &data, 1);
+	get_cmd_args(argv[3], &data, 0);
+	ft_printf("%s - %s\n", data->rcmd_args[0], data->rcmd_args[1]);
 
 	int	size;
 
@@ -61,7 +46,7 @@ int	main(int argc, char const *argv[], char *envp[])
 
 	while (i < size)
 	{
-		testcmd = ft_calloc(ft_strlen(env_paths[i]) + ft_strlen(cmd1[0]) + 2, sizeof(char));
+		testcmd = ft_calloc(ft_strlen(env_paths[i]) + ft_strlen(data->lcmd_args[0]) + 2, sizeof(char));
 		if (testcmd == NULL)
 		{
 			ft_putendl_fd("Pipex: testcmd1 malloc error", 2);
@@ -72,11 +57,11 @@ int	main(int argc, char const *argv[], char *envp[])
 		}
 		ft_strlcat(testcmd, env_paths[i], ft_strlen(testcmd) + ft_strlen(env_paths[i]) + 1);
 		ft_strlcat(testcmd, "/", ft_strlen(testcmd) + 2);
-		ft_strlcat(testcmd, cmd1[0], ft_strlen(testcmd) + ft_strlen(cmd1[0]) + 1);
+		ft_strlcat(testcmd, data->lcmd_args[0], ft_strlen(testcmd) + ft_strlen(data->lcmd_args[0]) + 1);
 		if (access(testcmd, X_OK) == 0)
 		{
-			cmd1_path = ft_strdup(testcmd);
-			if (cmd1_path == NULL)
+			data->lcmd_path = ft_strdup(testcmd);
+			if (data->lcmd_path == NULL)
 			{
 				ft_putendl_fd("Pipex: cmd1_path malloc error", 2);
 				free(testcmd);
@@ -91,8 +76,7 @@ int	main(int argc, char const *argv[], char *envp[])
 		free(testcmd);
 		i++;
 	}
-	ft_printf("%s (%d)\n", cmd1_path, access(cmd1_path, X_OK));
-	free(cmd1_path);
+	ft_printf("%s (%d)\n", data->lcmd_path, access(data->lcmd_path, X_OK));
 }
 
 

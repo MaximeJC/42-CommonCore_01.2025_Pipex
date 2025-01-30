@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:48:44 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/30 13:39:07 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:10:36 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	data_init(t_pipex **data)
 	(*data)->rcmd_path = NULL;
 }
 
-void	error_handler(char *msg, t_pipex **data)
+void	error_handler(char *msg, t_pipex **data, char **env_paths)
 {
 	ft_putendl_fd(msg, 2);
 	if (data != NULL)
@@ -30,34 +30,12 @@ void	error_handler(char *msg, t_pipex **data)
 		if ((*data)->rcmd_path != NULL)
 			free((*data)->rcmd_path);
 		if ((*data)->lcmd_args != NULL)
-		{
-			free_array((*data)->lcmd_args);
-			free((*data)->lcmd_args);
-		}
+			ft_strtab_free((*data)->lcmd_args);
 		if ((*data)->rcmd_args != NULL)
-		{
-			free_array((*data)->rcmd_args);
-			free((*data)->rcmd_args);
-		}
+			ft_strtab_free((*data)->rcmd_args);
 		free(*data);
 	}
+	if (env_paths != NULL)
+		ft_strtab_free(env_paths);
 	exit(EXIT_FAILURE);
-}
-
-void	free_array(char **array)
-{
-	int	i;
-	int	size;
-
-	i = 0;
-	size = 0;
-	while (array[size] != NULL)
-		size++;
-	while (i < size)
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-	return ;
 }

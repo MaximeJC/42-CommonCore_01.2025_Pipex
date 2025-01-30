@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/30 13:22:18 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:52:30 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,32 @@ char	**get_env_path(char *envp[])
 		i++;
 	}
 	if (envp[i] == NULL)
-		error_handler("Pipex: envp reading error", NULL);
+		error_handler("Pipex: envp reading error", NULL, NULL);
 	path = ft_strdup(envp[i] + 5);
 	if (path == NULL)
-		error_handler("Pipex: envp path duplication error", NULL);
+		error_handler("Pipex: envp path duplication error", NULL, NULL);
 	env_paths = ft_split(path, ':');
 	if (env_paths == NULL)
 	{
 		free(path);
-		error_handler("Pipex: envp path split error", NULL);
+		error_handler("Pipex: envp path split error", NULL, NULL);
 	}
 	free(path);
 	return (env_paths);
 }
 
-void	get_cmd_args(char const *argv, t_pipex **data, int left)
+void	get_cmd_args(char const *argv, t_pipex **data, char **env_paths, int left)
 {
 	if (left)
 	{
 		(*data)->lcmd_args = ft_split(argv, ' ');
 		if ((*data)->lcmd_args == NULL || (*data)->lcmd_args[0] == NULL)
-			error_handler("Pipex: Left command split error", data);
+			error_handler("Pipex: Left command split error", data, env_paths);
 	}
 	else
 	{
 		(*data)->rcmd_args = ft_split(argv, ' ');
 		if ((*data)->rcmd_args == NULL || (*data)->rcmd_args[0] == NULL)
-			error_handler("Pipex: Right command split error", data);
+			error_handler("Pipex: Right command split error", data, env_paths);
 	}
 }

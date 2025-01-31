@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/30 15:34:20 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/01/31 11:13:32 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@ int	main(int argc, char const *argv[], char *envp[])
 {
 	t_pipex	*data;
 	char	**env_paths;
-	char	*testcmd;
-	int		i;
-	int		size;
 
 	if (argc < 5)
 		error_handler("Pipex: Not enough arguments", NULL, NULL);
@@ -28,36 +25,15 @@ int	main(int argc, char const *argv[], char *envp[])
 	if (data == NULL)
 		error_handler("Pipex: Data malloc error", NULL, NULL);
 	data_init(&data);
-	i = 0;
-	testcmd = NULL;
 	env_paths = get_env_path(envp);
 	get_cmd_args(argv[2], &data, env_paths, 1);
 	get_cmd_args(argv[3], &data, env_paths, 0);
-	size = ft_strtab_size(env_paths);
 
-	// TODO verif if absolute path
-	while (i < size)
-	{
-		testcmd = ft_calloc(ft_strlen(env_paths[i]) + ft_strlen(data->lcmd_args[0]) + 2, sizeof(char));
-		if (testcmd == NULL)
-			error_handler("Pipex: testcmd1 malloc error", &data, env_paths);
-		ft_strlcat(testcmd, env_paths[i], ft_strlen(testcmd) + ft_strlen(env_paths[i]) + 1);
-		ft_strlcat(testcmd, "/", ft_strlen(testcmd) + 2);
-		ft_strlcat(testcmd, data->lcmd_args[0], ft_strlen(testcmd) + ft_strlen(data->lcmd_args[0]) + 1);
-		if (access(testcmd, X_OK) == 0)
-		{
-			data->lcmd_path = ft_strdup(testcmd);
-			if (data->lcmd_path == NULL)
-			{
-				free(testcmd);
-				error_handler("Pipex: cmd1_path malloc error", &data, env_paths);
-			}
-			free(testcmd);
-			break;
-		}
-		free(testcmd);
-		i++;
-	}
+	//! Si erreur avec une commande, passer 0 la suivante
+	//! Si erreur de lecture du fichier d'entree, passer a la 2eme qui aura rien en entree
+	//! Si erreur fichier de sortie, pas d'execution de la derniere commande
+	//! Pour le limiteur -> Il faut que la ligne soit egale a "LIMITEUR\n" (ou \0)
+
 	// TODO Add verif si rien trouve => data->lcmd_path uninitialized (pour commande suivante)
 	if (data->lcmd_path != NULL)
 		ft_printf("%s (%d)\n", data->lcmd_path, access(data->lcmd_path, X_OK));

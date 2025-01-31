@@ -6,5 +6,7 @@ pipex
 !pipex/
 input
 output
+in
+out
 test
 .vscode

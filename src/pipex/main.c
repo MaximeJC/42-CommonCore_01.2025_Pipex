@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 10:53:05 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/04 11:32:11 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ int	main(int argc, char const *argv[], char *envp[])
 	get_cmd_args(argv[2], &data, env_paths, 1);
 	get_cmd_args(argv[3], &data, env_paths, 0);
 
-	//! Si erreur avec une commande, passer 0 la suivante
+	get_cmd_path(&data, env_paths);
+
+	//! Si erreur avec une commande, passer a la suivante
 	//! Si erreur de lecture du fichier d'entree, passer a la 2eme qui aura rien en entree
 	//! Si erreur fichier de sortie, pas d'execution de la derniere commande
 	//! Pour le limiteur -> Il faut que la ligne soit egale a "LIMITEUR\n" (ou \0)
@@ -40,6 +42,8 @@ int	main(int argc, char const *argv[], char *envp[])
 	else
 		error_handler("Pipex: command not found / have permision to execute it",
 			&data, env_paths, 0);
+
+	end_program(&data, env_paths);
 }
 
 /* int main(int argc, char *argv[])

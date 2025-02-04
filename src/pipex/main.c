@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 16:06:45 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:17:08 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	main(int argc, char const *argv[], char *envp[])
 		error_handler(ERR_CMD_NOT_FOUND, &data, env_paths, 0);
 	end_program(&data, env_paths);
 }
+
+//? --track-fds=yes --track-origins=yes --keep-debuginfo=yes --leak-check=full --show-leak-kinds=all --trace-children=yes
 
 	//! Si erreur avec une commande, passer a la suivante
 	//! Si erreur de lecture du fichier d'entree, passer a la 2eme qui aura rien en entree

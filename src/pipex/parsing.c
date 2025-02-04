@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 10:59:31 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/04 11:44:19 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ char	**get_env_path(char *envp[])
 	return (env_paths);
 }
 
-void	get_cmd_args(char const *argv, t_pipex **data, char **env_paths, int left)
+void	get_cmd_args(char const *argv, t_pipex **data,
+	char **env_paths, int left)
 {
 	if (left)
 	{
@@ -68,26 +69,34 @@ void	get_cmd_path(t_pipex **data, char **env_paths)
 	i = 0;
 	size = ft_strtab_size(env_paths);
 	testcmd = NULL;
-		// TODO verif if absolute path
-	while (i < size)
+	if (access((*data)->lcmd_args[0], X_OK) == 0)
 	{
-		testcmd = ft_calloc(ft_strlen(env_paths[i]) + ft_strlen((*data)->lcmd_args[0]) + 2, sizeof(char));
+		(*data)->lcmd_path = ft_strdup((*data)->lcmd_args[0]);
+		if ((*data)->lcmd_path == NULL)
+			error_handler("Pipex: command path malloc error",
+				data, env_paths, 0);
+	}
+	while (i < size && (*data)->lcmd_path == NULL)
+	{
+		testcmd = ft_calloc(ft_strlen(env_paths[i])
+				+ ft_strlen((*data)->lcmd_args[0]) + 2, sizeof(char));
 		if (testcmd == NULL)
-			error_handler("Pipex: test_command path malloc error", &data, env_paths, 0);
-		ft_strlcat(testcmd, env_paths[i], ft_strlen(testcmd) + ft_strlen(env_paths[i]) + 1);
+			error_handler("Pipex: test_command path malloc error",
+				data, env_paths, 0);
+		ft_strlcat(testcmd, env_paths[i], ft_strlen(testcmd)
+			+ ft_strlen(env_paths[i]) + 1);
 		ft_strlcat(testcmd, "/", ft_strlen(testcmd) + 2);
-		ft_strlcat(testcmd, (*data)->lcmd_args[0], ft_strlen(testcmd) + ft_strlen((*data)->lcmd_args[0]) + 1);
+		ft_strlcat(testcmd, (*data)->lcmd_args[0], ft_strlen(testcmd)
+			+ ft_strlen((*data)->lcmd_args[0]) + 1);
 		//TODO Replace with strscat or strsjoin
 		if (access(testcmd, X_OK) == 0)
 		{
 			(*data)->lcmd_path = ft_strdup(testcmd);
-			if ((*data)->lcmd_path == NULL)
-			{
-				free(testcmd);
-				error_handler("Pipex: command path malloc error", data, env_paths, 0);
-			}
 			free(testcmd);
-			break;
+			if ((*data)->lcmd_path == NULL)
+				error_handler("Pipex: command path malloc error",
+					data, env_paths, 0);
+			break ;
 		}
 		free(testcmd);
 		i++;

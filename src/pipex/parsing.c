@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 11:44:19 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:31:17 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,10 @@ void	get_cmd_path(t_pipex **data, char **env_paths)
 	}
 	while (i < size && (*data)->lcmd_path == NULL)
 	{
-		testcmd = ft_calloc(ft_strlen(env_paths[i])
-				+ ft_strlen((*data)->lcmd_args[0]) + 2, sizeof(char));
+		testcmd = ft_strsjoin(3, env_paths[i], "/", (*data)->lcmd_args[0]);
 		if (testcmd == NULL)
 			error_handler("Pipex: test_command path malloc error",
 				data, env_paths, 0);
-		ft_strlcat(testcmd, env_paths[i], ft_strlen(testcmd)
-			+ ft_strlen(env_paths[i]) + 1);
-		ft_strlcat(testcmd, "/", ft_strlen(testcmd) + 2);
-		ft_strlcat(testcmd, (*data)->lcmd_args[0], ft_strlen(testcmd)
-			+ ft_strlen((*data)->lcmd_args[0]) + 1);
-		//TODO Replace with strscat or strsjoin
 		if (access(testcmd, X_OK) == 0)
 		{
 			(*data)->lcmd_path = ft_strdup(testcmd);

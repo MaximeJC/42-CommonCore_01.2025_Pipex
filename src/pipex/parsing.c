@@ -6,11 +6,14 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 14:55:34 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:14:56 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+static void	get_cmd_path_bis(char **cmd_path, char **cmd_args, t_pipex **data,
+				char **env_paths);
 
 char	**get_env_path(char *envp[])
 {
@@ -58,7 +61,20 @@ void	get_cmd_args(char const *argv, t_pipex **data,
 	}
 }
 
-void	get_cmd_path(t_pipex **data, char **env_paths)
+void	get_cmd_path(char **cmd_path, char **cmd_args, t_pipex **data,
+	char **env_paths)
+{
+	if (access(cmd_args[0], X_OK) == 0)
+	{
+		*cmd_path = ft_strdup(cmd_args[0]);
+		if (*cmd_path == NULL)
+			error_handler(ERR_CMD_PATH_MALLOC, data, env_paths, 0);
+	}
+	get_cmd_path_bis(cmd_path, cmd_args, data, env_paths);
+}
+
+static void	get_cmd_path_bis(char **cmd_path, char **cmd_args, t_pipex **data,
+	char **env_paths)
 {
 	int		i;
 	int		size;
@@ -67,26 +83,21 @@ void	get_cmd_path(t_pipex **data, char **env_paths)
 	i = 0;
 	size = ft_strtab_size(env_paths);
 	testcmd = NULL;
-	if (access((*data)->lcmd_args[0], X_OK) == 0)
+	while (i < size && *cmd_path == NULL)
 	{
-		(*data)->lcmd_path = ft_strdup((*data)->lcmd_args[0]);
-		if ((*data)->lcmd_path == NULL)
-			error_handler(ERR_CMD_PATH_MALLOC, data, env_paths, 0);
-	}
-	while (i < size && (*data)->lcmd_path == NULL)
-	{
-		testcmd = ft_strsjoin(3, env_paths[i], "/", (*data)->lcmd_args[0]);
+		testcmd = ft_strsjoin(3, env_paths[i], "/", cmd_args[0]);
 		if (testcmd == NULL)
 			error_handler(ERR_TCMD_PATH_MALLOC, data, env_paths, 0);
-		if (access(testcmd, X_OK) == 0)
+		else if (access(testcmd, X_OK) == 0)
 		{
-			(*data)->lcmd_path = ft_strdup(testcmd);
+			*cmd_path = ft_strdup(testcmd);
 			free(testcmd);
-			if ((*data)->lcmd_path == NULL)
+			if (*cmd_path == NULL)
 				error_handler(ERR_CMD_PATH_MALLOC, data, env_paths, 0);
-			break ;
+			return ;
 		}
 		free(testcmd);
 		i++;
 	}
+	return ;
 }

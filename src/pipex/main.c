@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 14:50:09 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:06:45 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int	main(int argc, char const *argv[], char *envp[])
 {
-	t_pipex	*data;
 	char	**env_paths;
+	// int		pipefd[2];
+	t_pipex	*data;
 
 	if (argc < 5)
 		error_handler(ERR_LESS_ARGS, NULL, NULL, 1);
@@ -28,20 +29,20 @@ int	main(int argc, char const *argv[], char *envp[])
 	env_paths = get_env_path(envp);
 	get_cmd_args(argv[2], &data, env_paths, 1);
 	get_cmd_args(argv[3], &data, env_paths, 0);
-	get_cmd_path(&data, env_paths);
+	get_cmd_path(&(data->lcmd_path), data->lcmd_args, &data, env_paths);
+	get_cmd_path(&(data->rcmd_path), data->rcmd_args, &data, env_paths);
+	// TODO Add verif si rien trouve => data->lcmd_path uninitialized (pour commande suivante)
+	if (data->lcmd_path == NULL)
+		error_handler(ERR_CMD_NOT_FOUND, &data, env_paths, 0);
+	if (data->rcmd_path == NULL)
+		error_handler(ERR_CMD_NOT_FOUND, &data, env_paths, 0);
+	end_program(&data, env_paths);
+}
 
 	//! Si erreur avec une commande, passer a la suivante
 	//! Si erreur de lecture du fichier d'entree, passer a la 2eme qui aura rien en entree
 	//! Si erreur fichier de sortie, pas d'execution de la derniere commande
 	//! Pour le limiteur -> Il faut que la ligne soit egale a "LIMITEUR\n" (ou \0)
-
-	// TODO Add verif si rien trouve => data->lcmd_path uninitialized (pour commande suivante)
-	if (data->lcmd_path != NULL)
-		ft_printf("%s (%d)\n", data->lcmd_path, access(data->lcmd_path, X_OK));
-	else
-		error_handler(ERR_CMD_NOT_FOUND, &data, env_paths, 0);
-	end_program(&data, env_paths);
-}
 
 /* int main(int argc, char *argv[])
 {

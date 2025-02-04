@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:38:07 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 11:30:27 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:55:14 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@
 # include <errno.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+
+# define ERR_LESS_ARGS "Pipex: Not enough args\n ./pipex file1 cmd1 cmd2 file2"
+# define ERR_MORE_ARGS "Pipex: Too much args\n ./pipex file1 cmd1 cmd2 file2"
+# define ERR_DATA_MALLOC "Pipex: Data malloc error"
+# define ERR_CMD_NOT_FOUND "Pipex: Command not found / Don't have permision"
+# define ERR_ENVP_READ "Pipex: envp reading error"
+# define ERR_ENVP_PATH_DUP "Pipex: envp path line duplication error"
+# define ERR_ENVP_PATH_SPLIT "Pipex: envp path split error"
+# define ERR_LCMD_SPLIT "Pipex: Left command split error"
+# define ERR_RCMD_SPLIT "Pipex: Right command split error"
+# define ERR_CMD_PATH_MALLOC "Pipex: command path malloc error"
+# define ERR_TCMD_PATH_MALLOC "Pipex: test_command path malloc error"
 
 typedef struct s_pipex
 {

@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:38:07 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/30 15:22:17 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/04 10:48:53 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ void	get_cmd_args(char const *argv, t_pipex **data,
 
 // utils.c
 void	data_init(t_pipex **data);
-void	error_handler(char *msg, t_pipex **data, char **env_paths);
+void	error_handler(char *msg, t_pipex **data, char **env_paths, int out);
 
 #endif

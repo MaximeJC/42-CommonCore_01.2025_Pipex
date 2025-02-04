@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/01/31 11:13:32 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/04 10:53:05 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ int	main(int argc, char const *argv[], char *envp[])
 	char	**env_paths;
 
 	if (argc < 5)
-		error_handler("Pipex: Not enough arguments", NULL, NULL);
+		error_handler("Pipex: Not enough arguments", NULL, NULL, 1);
 	else if (argc > 5)
-		error_handler("Pipex: Too much arguments", NULL, NULL);
+		error_handler("Pipex: Too much arguments", NULL, NULL, 1);
 	data = ft_calloc(1, sizeof(t_pipex));
 	if (data == NULL)
-		error_handler("Pipex: Data malloc error", NULL, NULL);
+		error_handler("Pipex: Data malloc error", NULL, NULL, 1);
 	data_init(&data);
 	env_paths = get_env_path(envp);
 	get_cmd_args(argv[2], &data, env_paths, 1);
@@ -38,13 +38,9 @@ int	main(int argc, char const *argv[], char *envp[])
 	if (data->lcmd_path != NULL)
 		ft_printf("%s (%d)\n", data->lcmd_path, access(data->lcmd_path, X_OK));
 	else
-		error_handler("Pipex: command not found", &data, env_paths);
+		error_handler("Pipex: command not found / have permision to execute it",
+			&data, env_paths, 0);
 }
-
-
-
-
-
 
 /* int main(int argc, char *argv[])
 {

@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:38:07 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 15:42:18 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/05 13:57:48 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,19 @@
 # define ERR_MORE_ARGS "Pipex: Too much args\n ./pipex file1 cmd1 cmd2 file2"
 # define ERR_DATA_MALLOC "Pipex: Data malloc error"
 # define ERR_CMD_NOT_FOUND "Pipex: Command not found / Don't have permision"
-# define ERR_ENVP_READ "Pipex: envp reading error"
-# define ERR_ENVP_PATH_DUP "Pipex: envp path line duplication error"
-# define ERR_ENVP_PATH_SPLIT "Pipex: envp path split error"
+# define ERR_ENVP_READ "Pipex: Envp reading error"
+# define ERR_ENVP_PATH_DUP "Pipex: Envp path line duplication error"
+# define ERR_ENVP_PATH_SPLIT "Pipex: Envp path split error"
 # define ERR_LCMD_SPLIT "Pipex: Left command split error"
 # define ERR_RCMD_SPLIT "Pipex: Right command split error"
-# define ERR_CMD_PATH_MALLOC "Pipex: command path malloc error"
-# define ERR_TCMD_PATH_MALLOC "Pipex: test_command path malloc error"
+# define ERR_CMD_PATH_MALLOC "Pipex: Command path malloc error"
+# define ERR_TCMD_PATH_MALLOC "Pipex: Test_command path malloc error"
+# define ERR_PIPE "Pipex: Pipe creation error"
+# define ERR_FORK "Pipex: Fork error"
+# define ERR_CMD_EXEC "Pipex: Command execution error"
+# define ERR_INFILE "Pipex: Infile opening error"
+# define ERR_OUTFILE "Pipex: Outfile opening error"
+
 
 typedef struct s_pipex
 {

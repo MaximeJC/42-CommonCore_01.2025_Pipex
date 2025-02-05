@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:48:44 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 11:30:15 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:31:01 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,5 @@ void	end_program(t_pipex **data, char **env_paths)
 	}
 	if (env_paths != NULL)
 		ft_strtab_free(env_paths);
+	exit(EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:38:07 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/05 13:57:48 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/06 00:28:57 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@
 # define ERR_CMD_EXEC "Pipex: Command execution error"
 # define ERR_INFILE "Pipex: Infile opening error"
 # define ERR_OUTFILE "Pipex: Outfile opening error"
-
 
 typedef struct s_pipex
 {

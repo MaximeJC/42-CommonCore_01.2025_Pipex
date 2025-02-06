@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 10:52:20 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 11:42:55 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/06 01:48:04 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,3 +58,16 @@
 	close(fd_out);
 	return 0;
 } */
+
+//? --track-fds=yes --track-origins=yes --keep-debuginfo=yes --leak-check=full --show-leak-kinds=all --trace-children=yes
+
+	//! Si erreur avec une commande, passer a la suivante
+	//! Si erreur de lecture du fichier d'entree, passer a la 2eme qui aura rien en entree
+	//! Si erreur fichier de sortie, pas d'execution de la derniere commande
+	//! Pour le limiteur -> Il faut que la ligne soit egale a "LIMITEUR\n" (ou \0)
+
+	//! Penser a free
+	//! Penser aux leaks
+	//! Penser a gerer les retours d'erreur des commandes
+	//! Afficher toutes les erreurs possibles
+	//! Penser a VALGRIND

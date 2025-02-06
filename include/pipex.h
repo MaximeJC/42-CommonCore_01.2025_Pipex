@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:38:07 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/06 00:28:57 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/06 02:25:34 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,17 @@ void	get_cmd_path(char **cmd_path, char **cmd_args, t_pipex **data,
 			char **env_paths);
 
 // pipex.c
+void	data_treatment(char const *argv[], t_pipex **data,
+			char ***env_paths, char *envp[]);
+void	first_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
+			int files_fd[]);
+void	last_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
+			int files_fd[]);
 
 // utils.c
 void	data_init(t_pipex **data);
 void	error_handler(char *msg, t_pipex **data, char **env_paths, int out);
 void	end_program(t_pipex **data, char **env_paths);
+void	close_fds(int pipefd[], int fd_in, int fd_out);
 
 #endif

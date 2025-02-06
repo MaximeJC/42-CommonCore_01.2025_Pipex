@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:48:44 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/05 14:31:01 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/06 02:05:03 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 void	data_init(t_pipex **data)
 {
+	*data = ft_calloc(1, sizeof(t_pipex));
+	if (data == NULL)
+		error_handler(ERR_DATA_MALLOC, NULL, NULL, 1);
 	(*data)->lcmd_args = NULL;
 	(*data)->lcmd_path = NULL;
 	(*data)->rcmd_args = NULL;
@@ -60,4 +63,14 @@ void	end_program(t_pipex **data, char **env_paths)
 	if (env_paths != NULL)
 		ft_strtab_free(env_paths);
 	exit(EXIT_SUCCESS);
+}
+
+void	close_fds(int pipefd[], int fd_in, int fd_out)
+{
+	if (fd_in >= 0)
+		close(fd_in);
+	if (fd_out >= 0)
+		close(fd_out);
+	close(pipefd[0]);
+	close(pipefd[1]);
 }

@@ -10,6 +10,5 @@ in
 out
 test
 .vscode
-more.c
 pipex_bonus
 !pipex_bonus/

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   parsing_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 16:14:56 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/10 11:33:55 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 static void	get_cmd_path_bis(char **cmd_path, char **cmd_args, t_pipex **data,
 				char **env_paths);

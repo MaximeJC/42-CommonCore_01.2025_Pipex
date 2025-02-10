@@ -6,16 +6,16 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/10 11:33:55 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:25:50 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static void	get_cmd_path_bis(char **cmd_path, char **cmd_args, t_pipex **data,
-				char **env_paths);
+// static void	get_cmd_path_bis(char **cmd_path, char **cmd_args, t_pipex **data,
+// 				char **env_paths);
 
-char	**get_env_path(char *envp[])
+char	**get_env_path(char *envp[], t_pipex **data)
 {
 	int		i;
 	char	*path;
@@ -30,21 +30,21 @@ char	**get_env_path(char *envp[])
 		i++;
 	}
 	if (envp[i] == NULL)
-		error_handler(ERR_ENVP_READ, NULL, NULL, 1);
+		error_handler(ERR_ENVP_READ, data, NULL, 1);
 	path = ft_strdup(envp[i] + 5);
 	if (path == NULL)
-		error_handler(ERR_ENVP_PATH_DUP, NULL, NULL, 1);
+		error_handler(ERR_ENVP_PATH_DUP, data, NULL, 1);
 	env_paths = ft_split(path, ':');
 	if (env_paths == NULL)
 	{
 		free(path);
-		error_handler(ERR_ENVP_PATH_SPLIT, NULL, NULL, 1);
+		error_handler(ERR_ENVP_PATH_SPLIT, data, NULL, 1);
 	}
 	free(path);
 	return (env_paths);
 }
 
-void	get_cmd_args(char const *argv, t_pipex **data,
+/* void	get_cmd_args(char const *argv, t_pipex **data,
 	char **env_paths, int left)
 {
 	if (left)
@@ -100,4 +100,4 @@ static void	get_cmd_path_bis(char **cmd_path, char **cmd_args, t_pipex **data,
 		i++;
 	}
 	return ;
-}
+} */

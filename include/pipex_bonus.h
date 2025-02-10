@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:16:36 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/10 11:33:26 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:27:57 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-# define ERR_LESS_ARGS "Pipex: Not enough args\n ./pipex file1 cmd1 cmd2 file2"
-# define ERR_MORE_ARGS "Pipex: Too much args\n ./pipex file1 cmd1 cmd2 file2"
+# define ERR_HD_ARGS "Pipex use: ./pipex_bonus here_doc LIMITER cmd1 cmd2 file"
+# define ERR_LESS_ARGS "Pipex use: ./pipex_bonus file1 cmd1 cmd2 file2"
+// # define ERR_MORE_ARGS "Pipex: Too much args\n ./pipex file1 cmd1 cmd2 file2"
 # define ERR_DATA_MALLOC "Pipex: Data malloc error"
 # define ERR_CMD_NOT_FOUND "Pipex: Command not found / Don't have permision"
 # define ERR_ENVP_READ "Pipex: Envp reading error"
@@ -38,33 +39,40 @@
 
 typedef struct s_pipex
 {
-	char	*lcmd_path;
-	char	**lcmd_args;
-	char	*rcmd_path;
-	char	**rcmd_args;
+	char	**env_paths;
+	char	*cmd_path;
+	char	**cmd_args;
+	int		**pipes;
+	int		here_doc;
+	int		cmd_index;
 }	t_pipex;
 
 // main_bonus.c
 
 // parsing_bonus.c
-char	**get_env_path(char *envp[]);
-void	get_cmd_args(char const *argv, t_pipex **data,
-			char **env_paths, int left);
-void	get_cmd_path(char **cmd_path, char **cmd_args, t_pipex **data,
-			char **env_paths);
+char	**get_env_path(char *envp[], t_pipex **data);
+// char	**get_env_path(char *envp[]);
+// void	get_cmd_args(char const *argv, t_pipex **data,
+// 			char **env_paths, int left);
+// void	get_cmd_path(char **cmd_path, char **cmd_args, t_pipex **data,
+// 			char **env_paths);
 
 // pipex_bonus.c
-void	data_treatment(char const *argv[], t_pipex **data,
-			char ***env_paths, char *envp[]);
-void	first_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
-			int files_fd[]);
-void	last_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
-			int files_fd[]);
+// void	data_treatment(char const *argv[], t_pipex **data,
+// 			char ***env_paths, char *envp[]);
+// void	first_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
+// 			int files_fd[]);
+// void	last_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
+// 			int files_fd[]);
 
 // utils_bonus.c
-void	data_init(t_pipex **data);
-void	error_handler(char *msg, t_pipex **data, char **env_paths, int out);
-void	end_program(t_pipex **data, char **env_paths);
-void	close_fds(int pipefd[], int fd_in, int fd_out);
+void	data_init(t_pipex **data, char const *argv[], char *envp[]);
+void	set_pipes(t_pipex **data, int argc);
+void	error_handler(char *msg, t_pipex **data, int *files_fd[], int out);
+void	close_fds(t_pipex **data);
+// void	data_init(t_pipex **data, char const *argv[], char *envp[]);
+// void	error_handler(char *msg, t_pipex **data, char **env_paths, int out);
+// void	end_program(t_pipex **data, char **env_paths);
+// void	close_fds(int pipefd[], int fd_in, int fd_out);
 
 #endif

@@ -1,73 +1,72 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_bonus.c                                      :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 10:52:20 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/06 01:48:04 by mgouraud         ###   ########.fr       */
+/*   Created: 2025/01/30 09:56:13 by mgouraud          #+#    #+#             */
+/*   Updated: 2025/02/06 02:18:36 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-/* int main(int argc, char *argv[])
+void	data_treatment(char const *argv[], t_pipex **data,
+	char ***env_paths, char *envp[])
 {
-	int	fd_out;
-	int	fd_in;
+	data_init(data);
+	*env_paths = get_env_path(envp);
+	get_cmd_args(argv[2], data, *env_paths, 1);
+	get_cmd_args(argv[3], data, *env_paths, 0);
+	get_cmd_path(&((*data)->lcmd_path), (*data)->lcmd_args, data, *env_paths);
+	get_cmd_path(&((*data)->rcmd_path), (*data)->rcmd_args, data, *env_paths);
+}
 
-	if (argc < 5 || (argc < 6 && !ft_strncmp(argv[2], "here_doc", 8)))
+void	first_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
+	int files_fd[])
+{
+	int	pid1;
+
+	if ((*data)->lcmd_path == NULL)
+		error_handler(ERR_CMD_NOT_FOUND, data, env_paths, 0);
+	else if (files_fd[0] >= 0)
 	{
-		ft_putendl_fd("Pipex: Not enough arguments!", 2);
-		exit(EXIT_FAILURE);
+		pid1 = fork();
+		if (pid1 < 0)
+			error_handler(ERR_FORK, data, env_paths, 0);
+		else if (pid1 == 0)
+		{
+			dup2(files_fd[0], STDIN_FILENO);
+			dup2(pipefd[1], STDOUT_FILENO);
+			close_fds(pipefd, files_fd[0], files_fd[1]);
+			if (execve((*data)->lcmd_path, (*data)->lcmd_args, NULL) == -1)
+				error_handler(ERR_FORK, data, env_paths, 0);
+			end_program(data, env_paths);
+		}
 	}
-	else
+}
+
+void	last_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
+	int files_fd[])
+{
+	int	pid2;
+
+	if ((*data)->rcmd_path == NULL)
+		error_handler(ERR_CMD_NOT_FOUND, data, env_paths, 0);
+	else if (files_fd[1] >= 0)
 	{
-		if (!ft_strncmp(argv[2], "here_doc", 8))
+		pid2 = fork();
+		if (pid2 < 0)
+			error_handler(ERR_FORK, data, env_paths, 0);
+		else if (pid2 == 0)
 		{
-			fd_in = 0;								// * <<
-			fd_out = open(argv[argc - 1], O_RDWR | O_APPEND | O_CREAT, 0777);
-					// * >>
-			//TODO Gestion << et >>
+			dup2(pipefd[0], STDIN_FILENO);
+			dup2(files_fd[1], STDOUT_FILENO);
+			close_fds(pipefd, files_fd[0], files_fd[1]);
+			if (execve((*data)->rcmd_path, (*data)->rcmd_args, NULL) == -1)
+				error_handler(ERR_FORK, data, env_paths, 0);
+			end_program(data, env_paths);
 		}
-		else
-		{
-			fd_in = open(argv[1], O_RDONLY);		// * <
-			if (fd_in < 0)
-			{
-				ft_putendl_fd("Pipex: Can't open input file!", 2);
-				exit(EXIT_FAILURE);
-			}
-			fd_out = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0777);
-					// * >
-			//TODO Get file 2 (argv[argc - 1])
-		}
-		//TODO Check if exist and Get file 1 (argv[1])
-
-		//TODO Execute all commands one by one
-
-		//! Penser a free
-		//! Penser aux leaks
-		//! Penser a gerer les retours d'erreur des commandes
-		//! Afficher toutes les erreurs possibles
-		//! Penser a VALGRIND
 	}
-	if (fd_in > 0)
-		close(fd_in);
-	close(fd_out);
-	return 0;
-} */
-
-//? --track-fds=yes --track-origins=yes --keep-debuginfo=yes --leak-check=full --show-leak-kinds=all --trace-children=yes
-
-	//! Si erreur avec une commande, passer a la suivante
-	//! Si erreur de lecture du fichier d'entree, passer a la 2eme qui aura rien en entree
-	//! Si erreur fichier de sortie, pas d'execution de la derniere commande
-	//! Pour le limiteur -> Il faut que la ligne soit egale a "LIMITEUR\n" (ou \0)
-
-	//! Penser a free
-	//! Penser aux leaks
-	//! Penser a gerer les retours d'erreur des commandes
-	//! Afficher toutes les erreurs possibles
-	//! Penser a VALGRIND
+}

@@ -6,19 +6,71 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:48:44 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/10 16:28:43 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/11 16:02:43 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static int	*get_pipe();
+static int	*get_pipe(void);
+static void	heredoc_read(char const *argv[], int temp_fd);
+
+void	open_files_fd(t_pipex **data, char const *argv[], int argc)
+{
+	int		temp_fd;
+
+	temp_fd = -1;
+	if ((*data)->here_doc == 0)
+	{
+		(*data)->files_fd[0] = open(argv[1], O_RDONLY);
+		(*data)->files_fd[1] = open(argv[argc - 1],
+				O_RDWR | O_TRUNC | O_CREAT, 0777);
+	}
+	else
+	{
+		temp_fd = open(".tmp", O_RDWR | O_TRUNC | O_CREAT, 0777);
+		if (temp_fd < 0)
+			error_handler(ERR_HD_INFILE, data, 0);
+		heredoc_read(argv, temp_fd);
+		close(temp_fd);
+		(*data)->files_fd[0] = open(".tmp", O_RDONLY);
+		(*data)->files_fd[1] = open(argv[argc - 1],
+				O_RDWR | O_APPEND | O_CREAT, 0777);
+	}
+	if ((*data)->files_fd[0] < 0)
+		error_handler(ERR_INFILE, data, 0);
+	if ((*data)->files_fd[1] < 0)
+		error_handler(ERR_OUTFILE, data, 0);
+}
+
+static void	heredoc_read(char const *argv[], int temp_fd)
+{
+	char	*str;
+
+	str = NULL;
+	while (1 == 1)
+	{
+		ft_putstr_fd(" pipex heredoc> ", 1);
+		str = get_next_line(0);
+		if (str == NULL)
+			break ;
+		else if (ft_strncmp(str, argv[2], ft_strlen(argv[2])) == 0
+			&& str[ft_strlen(argv[2])] == '\n')
+		{
+			free(str);
+			break ;
+		}
+		ft_putstr_fd(str, temp_fd);
+		free(str);
+		str = NULL;
+	}
+}
 
 void	data_init(t_pipex **data, char const *argv[], char *envp[])
 {
 	*data = ft_calloc(1, sizeof(t_pipex));
 	if (data == NULL)
-		error_handler(ERR_DATA_MALLOC, NULL, NULL, 1);
+		error_handler(ERR_DATA_MALLOC, NULL, 1);
 	(*data)->cmd_args = NULL;
 	(*data)->cmd_path = NULL;
 	(*data)->env_paths = get_env_path(envp, data);
@@ -27,6 +79,8 @@ void	data_init(t_pipex **data, char const *argv[], char *envp[])
 	else
 		(*data)->here_doc = 0;
 	(*data)->cmd_index = 0;
+	(*data)->files_fd[0] = -1;
+	(*data)->files_fd[1] = -1;
 }
 
 void	set_pipes(t_pipex **data, int argc)
@@ -36,25 +90,20 @@ void	set_pipes(t_pipex **data, int argc)
 
 	i = 0;
 	nb_pipes = argc - 3 - (*data)->here_doc;
-	(*data)->pipes = ft_calloc(nb_pipes + 1, sizeof(int[2]));
+	(*data)->pipes = ft_calloc(nb_pipes + 1, sizeof(int [2]));
 	if ((*data)->pipes == NULL)
-		error_handler(ERR_PIPE, data, NULL, 1);
+		error_handler(ERR_PIPE, data, 1);
 	while (i < nb_pipes)
 	{
 		(*data)->pipes[i] = get_pipe();
 		if ((*data)->pipes[i] == NULL)
-		{
-			close_fds(data); //-1, -1
-			(*data)->pipes = NULL;
-			error_handler(ERR_PIPE, data, NULL, 1);
-		}
-		ft_printf("[Pipe %d] %d - %d\n", i + 1, (*data)->pipes[i][0], (*data)->pipes[i][1]);
+			error_handler(ERR_PIPE, data, 1);
 		i++;
 	}
 	(*data)->pipes[i] = NULL;
 }
 
-static int	*get_pipe()
+static int	*get_pipe(void)
 {
 	int	*fd;
 
@@ -69,7 +118,7 @@ static int	*get_pipe()
 	return (fd);
 }
 
-void	error_handler(char *msg, t_pipex **data, int *files_fd[], int out)
+void	error_handler(char *msg, t_pipex **data, int out)
 {
 	ft_putendl_fd(msg, 2);
 	if (out)
@@ -83,19 +132,18 @@ void	error_handler(char *msg, t_pipex **data, int *files_fd[], int out)
 			if ((*data)->env_paths != NULL)
 				ft_strtab_free((*data)->env_paths);
 			if ((*data)->pipes != NULL)
-				close_fds(data);
+				close_pipes(data);
+			if ((*data)->files_fd[0] >= 0)
+				close((*data)->files_fd[0]);
+			if ((*data)->files_fd[1] >= 0)
+				close((*data)->files_fd[1]);
 			free(*data);
-		}
-		if (files_fd != NULL)
-		{
-			close(*files_fd[0]);
-			close(*files_fd[1]);
 		}
 		exit(EXIT_FAILURE);
 	}
 }
 
-/* void	end_program(t_pipex **data, char **env_paths)
+void	end_program(t_pipex **data, int unlnk)
 {
 	if (data != NULL)
 	{
@@ -103,20 +151,26 @@ void	error_handler(char *msg, t_pipex **data, int *files_fd[], int out)
 			free((*data)->cmd_path);
 		if ((*data)->cmd_args != NULL)
 			ft_strtab_free((*data)->cmd_args);
+		if ((*data)->env_paths != NULL)
+			ft_strtab_free((*data)->env_paths);
+		if ((*data)->pipes != NULL)
+			close_pipes(data);
+		if ((*data)->files_fd[0] >= 0)
+			close((*data)->files_fd[0]);
+		if ((*data)->files_fd[1] >= 0)
+			close((*data)->files_fd[1]);
 		free(*data);
 	}
-	exit(EXIT_SUCCESS);
-} */
+	if (unlnk && access(".tmp", F_OK) == 0)
+		unlink(".tmp");
+	exit(errno);
+}
 
-void	close_fds(t_pipex **data)
+void	close_pipes(t_pipex **data)
 {
 	int	i;
 
 	i = 0;
-	// if (fd_in >= 0)
-	// 	close(fd_in);
-	// if (fd_out >= 0)
-	// 	close(fd_out);
 	if ((*data)->pipes != NULL)
 	{
 		while ((*data)->pipes[i] != NULL)

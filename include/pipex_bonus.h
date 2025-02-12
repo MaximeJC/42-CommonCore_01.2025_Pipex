@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:16:36 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/11 14:56:03 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:00:43 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,7 @@ typedef struct s_pipex
 
 // parsing_bonus.c
 char	**get_env_path(char *envp[], t_pipex **data);
-// char	**get_env_path(char *envp[]);
-// void	get_cmd_args(char const *argv, t_pipex **data,
-// 			char **env_paths, int left);
-// void	get_cmd_path(char **cmd_path, char **cmd_args, t_pipex **data,
-// 			char **env_paths);
+void	get_cmd(char const *argv, t_pipex **data);
 
 // pipex_bonus.c
 // void	data_treatment(char const *argv[], t_pipex **data,

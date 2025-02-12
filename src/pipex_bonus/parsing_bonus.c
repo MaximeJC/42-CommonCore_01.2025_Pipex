@@ -6,14 +6,13 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/11 16:03:33 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:25:33 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-// static void	get_cmd_path_bis(char **cmd_path, char **cmd_args, t_pipex **data,
-// 				char **env_paths);
+static void	get_cmd_path(t_pipex **data);
 
 char	**get_env_path(char *envp[], t_pipex **data)
 {
@@ -44,60 +43,53 @@ char	**get_env_path(char *envp[], t_pipex **data)
 	return (env_paths);
 }
 
-/* void	get_cmd_args(char const *argv, t_pipex **data,
-	char **env_paths, int left)
+void	get_cmd(char const *argv, t_pipex **data)
 {
-	if (left)
+	if ((*data)->cmd_path != NULL)
+		free((*data)->cmd_path);
+	(*data)->cmd_path = NULL;
+	if ((*data)->cmd_args != NULL)
+		ft_strtab_free((*data)->cmd_args);
+	(*data)->cmd_args = ft_split(argv, ' ');
+	if ((*data)->cmd_args == NULL || (*data)->cmd_args[0] == NULL)
 	{
-		(*data)->lcmd_args = ft_split(argv, ' ');
-		if ((*data)->lcmd_args == NULL || (*data)->lcmd_args[0] == NULL)
-			error_handler(ERR_LCMD_SPLIT, data, env_paths, 0);
+		error_handler(ERR_RCMD_SPLIT, data, 0);
+		return ;
 	}
-	else
+	if (access((*data)->cmd_args[0], X_OK) == 0)
 	{
-		(*data)->rcmd_args = ft_split(argv, ' ');
-		if ((*data)->rcmd_args == NULL || (*data)->rcmd_args[0] == NULL)
-			error_handler(ERR_RCMD_SPLIT, data, env_paths, 0);
+		(*data)->cmd_path = ft_strdup((*data)->cmd_args[0]);
+		if ((*data)->cmd_path == NULL)
+			error_handler(ERR_CMD_PATH_MALLOC, data, 0);
 	}
+	get_cmd_path(data);
 }
 
-void	get_cmd_path(char **cmd_path, char **cmd_args, t_pipex **data,
-	char **env_paths)
-{
-	if (access(cmd_args[0], X_OK) == 0)
-	{
-		*cmd_path = ft_strdup(cmd_args[0]);
-		if (*cmd_path == NULL)
-			error_handler(ERR_CMD_PATH_MALLOC, data, env_paths, 0);
-	}
-	get_cmd_path_bis(cmd_path, cmd_args, data, env_paths);
-}
-
-static void	get_cmd_path_bis(char **cmd_path, char **cmd_args, t_pipex **data,
-	char **env_paths)
+static void	get_cmd_path(t_pipex **data)
 {
 	int		i;
 	int		size;
 	char	*testcmd;
 
 	i = 0;
-	size = ft_strtab_size(env_paths);
+	size = ft_strtab_size((*data)->env_paths);
 	testcmd = NULL;
-	while (i < size && *cmd_path == NULL)
+	while (i < size && (*data)->cmd_path == NULL)
 	{
-		testcmd = ft_strsjoin(3, env_paths[i], "/", cmd_args[0]);
+		testcmd = ft_strsjoin(3, (*data)->env_paths[i], "/",
+				(*data)->cmd_args[0]);
 		if (testcmd == NULL)
-			error_handler(ERR_TCMD_PATH_MALLOC, data, env_paths, 0);
+			error_handler(ERR_TCMD_PATH_MALLOC, data, 0);
 		else if (access(testcmd, X_OK) == 0)
 		{
-			*cmd_path = ft_strdup(testcmd);
+			(*data)->cmd_path = ft_strdup(testcmd);
 			free(testcmd);
-			if (*cmd_path == NULL)
-				error_handler(ERR_CMD_PATH_MALLOC, data, env_paths, 0);
+			if ((*data)->cmd_path == NULL)
+				error_handler(ERR_CMD_PATH_MALLOC, data, 0);
 			return ;
 		}
 		free(testcmd);
 		i++;
 	}
 	return ;
-} */
+}

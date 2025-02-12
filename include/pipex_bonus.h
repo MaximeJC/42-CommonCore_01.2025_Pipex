@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:16:36 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/12 15:00:43 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:29:21 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_pipex
 	char	**cmd_args;
 	int		**pipes;
 	int		here_doc;
-	int		cmd_index;
 	int		files_fd[2];
 }	t_pipex;
 

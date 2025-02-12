@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:48:44 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/11 16:02:43 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:29:31 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	data_init(t_pipex **data, char const *argv[], char *envp[])
 		(*data)->here_doc = 1;
 	else
 		(*data)->here_doc = 0;
-	(*data)->cmd_index = 0;
 	(*data)->files_fd[0] = -1;
 	(*data)->files_fd[1] = -1;
 }

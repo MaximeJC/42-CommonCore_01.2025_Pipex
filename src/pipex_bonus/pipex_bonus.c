@@ -6,24 +6,13 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:56:13 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/10 16:22:44 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:02:58 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-/* void	data_treatment(char const *argv[], t_pipex **data,
-	char ***env_paths, char *envp[])
-{
-	data_init(data, argv, envp);
-	// *env_paths = get_env_path(envp);
-	get_cmd_args(argv[2], data, *env_paths, 1);
-	get_cmd_args(argv[3], data, *env_paths, 0);
-	get_cmd_path(&((*data)->lcmd_path), (*data)->lcmd_args, data, *env_paths);
-	get_cmd_path(&((*data)->rcmd_path), (*data)->rcmd_args, data, *env_paths);
-}
-
-void	first_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
+/* void	first_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
 	int files_fd[])
 {
 	int	pid1;
@@ -52,7 +41,6 @@ void	mid_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
 {
 	int	pid1;
 
-// TODO Var data a modifier
 	if ((*data)->lcmd_path == NULL)
 		error_handler(ERR_CMD_NOT_FOUND, data, env_paths, 0);
 	else if (files_fd[0] >= 0)
@@ -94,5 +82,4 @@ void	last_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
 			end_program(data, env_paths);
 		}
 	}
-}
- */
+} */

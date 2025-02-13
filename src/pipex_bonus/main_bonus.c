@@ -6,26 +6,11 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/13 11:06:37 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:56:56 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-void	print_temp(t_pipex *data, int no_cmd)
-{
-	int	i;
-
-	i = 0;
-	ft_printf("----- Cmd %d -----\n", no_cmd);
-	ft_printf("Path: %s\nArgs: \n", data->cmd_path);
-	while (data->cmd_args[i] != NULL)
-	{
-		ft_printf("  - %s\n", data->cmd_args[i]);
-		i++;
-	}
-	ft_printf("  - %s\n\n", data->cmd_args[i]);
-}
 
 int	main(int argc, char const *argv[], char *envp[])
 {
@@ -39,6 +24,7 @@ int	main(int argc, char const *argv[], char *envp[])
 	data_init(&data, argv, envp);
 	set_pipes(&data, argc);
 	open_files_fd(&data, argv, argc);
+	ft_printf("OUI\n");
 	i = 3 + data->here_doc;
 	if (data->files_fd[0] >= 0)
 	{
@@ -66,20 +52,3 @@ int	main(int argc, char const *argv[], char *envp[])
 	}
 	end_program(&data, 1);
 }
-
-	//* TODO Pipes
-	//* TODO Open fds (warning here_doc)
-	//* TODO First cmd
-	//* TODO Loop cmd 2 to cmd i-1
-	//* TODO Last cmd
-
-		//* TODO Get cmd path
-		//* TODO Get cmd args
-		//TODO Fork and execve cmd
-
-/* 	data_treatment(argv, &data, &env_paths, envp);
-	first_cmd_forking(&data, env_paths, pipefd, files_fd);
-	//TODO traitement commandes intermediaires
-	last_cmd_forking(&data, env_paths, pipefd, files_fd);
-	waitpid(-1, NULL, 0);
-	waitpid(-1, NULL, 0); */

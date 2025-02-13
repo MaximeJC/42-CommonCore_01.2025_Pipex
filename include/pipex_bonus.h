@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:16:36 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/13 11:08:56 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:14:30 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,12 @@ typedef struct s_pipex
 	int		files_fd[2];
 }	t_pipex;
 
-// main_bonus.c
-
 // parsing_bonus.c
 char	**get_env_path(char *envp[], t_pipex **data);
 void	get_cmd(char const *argv, t_pipex **data);
 
 // pipex_bonus.c
 void	cmd_forking(t_pipex **data, int cmd_index, int step, char *envp[]);
-// void	first_cmd_forking(t_pipex **data, int cmd_index);
-// void	mid_cmd_forking(t_pipex **data, int cmd_index);
-// void	last_cmd_forking(t_pipex **data, int cmd_index);
 
 // utils_bonus.c
 void	data_init(t_pipex **data, char const *argv[], char *envp[]);

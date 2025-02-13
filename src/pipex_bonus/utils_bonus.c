@@ -6,13 +6,12 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:48:44 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/12 15:29:31 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:32:13 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static int	*get_pipe(void);
 static void	heredoc_read(char const *argv[], int temp_fd);
 
 void	open_files_fd(t_pipex **data, char const *argv[], int argc)
@@ -80,41 +79,6 @@ void	data_init(t_pipex **data, char const *argv[], char *envp[])
 		(*data)->here_doc = 0;
 	(*data)->files_fd[0] = -1;
 	(*data)->files_fd[1] = -1;
-}
-
-void	set_pipes(t_pipex **data, int argc)
-{
-	int	i;
-	int	nb_pipes;
-
-	i = 0;
-	nb_pipes = argc - 3 - (*data)->here_doc;
-	(*data)->pipes = ft_calloc(nb_pipes + 1, sizeof(int [2]));
-	if ((*data)->pipes == NULL)
-		error_handler(ERR_PIPE, data, 1);
-	while (i < nb_pipes)
-	{
-		(*data)->pipes[i] = get_pipe();
-		if ((*data)->pipes[i] == NULL)
-			error_handler(ERR_PIPE, data, 1);
-		i++;
-	}
-	(*data)->pipes[i] = NULL;
-}
-
-static int	*get_pipe(void)
-{
-	int	*fd;
-
-	fd = ft_calloc(2, sizeof(int));
-	if (fd == NULL)
-		return (NULL);
-	if (pipe(fd) == -1)
-	{
-		free(fd);
-		return (NULL);
-	}
-	return (fd);
 }
 
 void	error_handler(char *msg, t_pipex **data, int out)

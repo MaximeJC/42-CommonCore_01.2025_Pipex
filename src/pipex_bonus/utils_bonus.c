@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:48:44 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/13 11:32:13 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:29:37 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,24 +126,5 @@ void	end_program(t_pipex **data, int unlnk)
 	}
 	if (unlnk && access(".tmp", F_OK) == 0)
 		unlink(".tmp");
-	exit(errno);
-}
-
-void	close_pipes(t_pipex **data)
-{
-	int	i;
-
-	i = 0;
-	if ((*data)->pipes != NULL)
-	{
-		while ((*data)->pipes[i] != NULL)
-		{
-			close((*data)->pipes[i][0]);
-			close((*data)->pipes[i][1]);
-			free((*data)->pipes[i]);
-			i++;
-		}
-		free((*data)->pipes);
-		(*data)->pipes = NULL;
-	}
+	exit(EXIT_SUCCESS);
 }

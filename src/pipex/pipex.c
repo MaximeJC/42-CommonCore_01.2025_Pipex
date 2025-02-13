@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:56:13 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/06 02:18:36 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 09:59:59 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	data_treatment(char const *argv[], t_pipex **data,
 	get_cmd_path(&((*data)->rcmd_path), (*data)->rcmd_args, data, *env_paths);
 }
 
-void	first_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
+void	first_cmd_forking(t_pipex **data, char **env_paths, int pipefd[],
 	int files_fd[])
 {
 	int	pid1;
@@ -47,7 +47,7 @@ void	first_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
 	}
 }
 
-void	last_cmd_forking(t_pipex **data,	char **env_paths, int pipefd[],
+void	last_cmd_forking(t_pipex **data, char **env_paths, int pipefd[],
 	int files_fd[])
 {
 	int	pid2;

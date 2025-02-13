@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/04 16:14:56 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 14:33:45 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void	get_cmd_path_bis(char **cmd_path, char **cmd_args, t_pipex **data,
 				char **env_paths);
+static void	get_env_path_bis(char *envp[], int *i);
 
 char	**get_env_path(char *envp[])
 {
@@ -23,25 +24,38 @@ char	**get_env_path(char *envp[])
 
 	i = 0;
 	path = NULL;
-	while (envp[i] != NULL)
-	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			break ;
-		i++;
-	}
-	if (envp[i] == NULL)
-		error_handler(ERR_ENVP_READ, NULL, NULL, 1);
+	get_env_path_bis(envp, &i);
+	if (i == -1)
+		return (NULL);
 	path = ft_strdup(envp[i] + 5);
 	if (path == NULL)
-		error_handler(ERR_ENVP_PATH_DUP, NULL, NULL, 1);
+	{
+		error_handler(ERR_ENVP_PATH_DUP, NULL, NULL, 0);
+		return (NULL);
+	}
 	env_paths = ft_split(path, ':');
 	if (env_paths == NULL)
 	{
 		free(path);
-		error_handler(ERR_ENVP_PATH_SPLIT, NULL, NULL, 1);
+		error_handler(ERR_ENVP_PATH_SPLIT, NULL, NULL, 0);
 	}
 	free(path);
 	return (env_paths);
+}
+
+static void	get_env_path_bis(char *envp[], int *i)
+{
+	while (envp[*i] != NULL)
+	{
+		if (ft_strncmp(envp[*i], "PATH=", 5) == 0)
+			break ;
+		(*i)++;
+	}
+	if (envp[*i] == NULL)
+	{
+		error_handler(ERR_ENVP_READ, NULL, NULL, 0);
+		*i = -1;
+	}
 }
 
 void	get_cmd_args(char const *argv, t_pipex **data,
@@ -69,8 +83,10 @@ void	get_cmd_path(char **cmd_path, char **cmd_args, t_pipex **data,
 		*cmd_path = ft_strdup(cmd_args[0]);
 		if (*cmd_path == NULL)
 			error_handler(ERR_CMD_PATH_MALLOC, data, env_paths, 0);
+		return ;
 	}
-	get_cmd_path_bis(cmd_path, cmd_args, data, env_paths);
+	if (env_paths != NULL)
+		get_cmd_path_bis(cmd_path, cmd_args, data, env_paths);
 }
 
 static void	get_cmd_path_bis(char **cmd_path, char **cmd_args, t_pipex **data,

@@ -6,13 +6,14 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/12 15:25:33 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 14:28:41 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
 static void	get_cmd_path(t_pipex **data);
+static void	get_env_path_bis(char *envp[], t_pipex **data, int *i);
 
 char	**get_env_path(char *envp[], t_pipex **data)
 {
@@ -22,25 +23,38 @@ char	**get_env_path(char *envp[], t_pipex **data)
 
 	i = 0;
 	path = NULL;
-	while (envp[i] != NULL)
-	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			break ;
-		i++;
-	}
-	if (envp[i] == NULL)
-		error_handler(ERR_ENVP_READ, data, 1);
+	get_env_path_bis(envp, data, &i);
+	if (i == -1)
+		return (NULL);
 	path = ft_strdup(envp[i] + 5);
 	if (path == NULL)
-		error_handler(ERR_ENVP_PATH_DUP, data, 1);
+	{
+		error_handler(ERR_ENVP_PATH_DUP, data, 0);
+		return (NULL);
+	}
 	env_paths = ft_split(path, ':');
 	if (env_paths == NULL)
 	{
 		free(path);
-		error_handler(ERR_ENVP_PATH_SPLIT, data, 1);
+		error_handler(ERR_ENVP_PATH_SPLIT, data, 0);
 	}
 	free(path);
 	return (env_paths);
+}
+
+static void	get_env_path_bis(char *envp[], t_pipex **data, int *i)
+{
+	while (envp[*i] != NULL)
+	{
+		if (ft_strncmp(envp[*i], "PATH=", 5) == 0)
+			break ;
+		(*i)++;
+	}
+	if (envp[*i] == NULL)
+	{
+		error_handler(ERR_ENVP_READ, data, 0);
+		*i = -1;
+	}
 }
 
 void	get_cmd(char const *argv, t_pipex **data)
@@ -61,8 +75,10 @@ void	get_cmd(char const *argv, t_pipex **data)
 		(*data)->cmd_path = ft_strdup((*data)->cmd_args[0]);
 		if ((*data)->cmd_path == NULL)
 			error_handler(ERR_CMD_PATH_MALLOC, data, 0);
+		return ;
 	}
-	get_cmd_path(data);
+	if ((*data)->env_paths != NULL)
+		get_cmd_path(data);
 }
 
 static void	get_cmd_path(t_pipex **data)

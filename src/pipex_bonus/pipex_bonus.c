@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:56:13 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/13 12:03:32 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:09:10 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static int	*get_pipe(void)
 void	cmd_forking(t_pipex **data, int cmd_index, int step, char *envp[])
 {
 	int	pid;
-	ft_printf("Cmd No %d: %s\n", cmd_index + 1, (*data)->cmd_path);
 	if ((*data)->cmd_path == NULL)
 		error_handler(ERR_CMD_NOT_FOUND, data, 0);
 	else

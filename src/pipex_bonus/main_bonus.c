@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/13 11:56:56 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:08:59 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	main(int argc, char const *argv[], char *envp[])
 	data_init(&data, argv, envp);
 	set_pipes(&data, argc);
 	open_files_fd(&data, argv, argc);
-	ft_printf("OUI\n");
 	i = 3 + data->here_doc;
 	if (data->files_fd[0] >= 0)
 	{

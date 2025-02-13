@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:16:36 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/13 12:26:47 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:11:05 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@
 # define ERR_ENVP_READ "Pipex: Envp reading error"
 # define ERR_ENVP_PATH_DUP "Pipex: Envp path line duplication error"
 # define ERR_ENVP_PATH_SPLIT "Pipex: Envp path split error"
-# define ERR_LCMD_SPLIT "Pipex: Left command split error"
-# define ERR_RCMD_SPLIT "Pipex: Right command split error"
+# define ERR_CMD_SPLIT "Pipex: Right command split error"
 # define ERR_CMD_PATH_MALLOC "Pipex: Command path malloc error"
 # define ERR_TCMD_PATH_MALLOC "Pipex: Test_command path malloc error"
 # define ERR_PIPE "Pipex: Pipe creation error"

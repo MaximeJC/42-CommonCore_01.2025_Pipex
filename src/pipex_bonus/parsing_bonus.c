@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/13 14:28:41 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:11:08 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	get_cmd(char const *argv, t_pipex **data)
 	(*data)->cmd_args = ft_split(argv, ' ');
 	if ((*data)->cmd_args == NULL || (*data)->cmd_args[0] == NULL)
 	{
-		error_handler(ERR_RCMD_SPLIT, data, 0);
+		error_handler(ERR_CMD_SPLIT, data, 0);
 		return ;
 	}
 	if (access((*data)->cmd_args[0], X_OK) == 0)

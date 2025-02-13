@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:16:36 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/12 16:13:50 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:08:56 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define ERR_INFILE "Pipex: Infile opening error"
 # define ERR_HD_INFILE "Pipex: Here_doc infile treatment error"
 # define ERR_OUTFILE "Pipex: Outfile opening error"
+# define ERR_DUP "Pipex: Fd duplication error"
 
 typedef struct s_pipex
 {
@@ -54,7 +55,7 @@ char	**get_env_path(char *envp[], t_pipex **data);
 void	get_cmd(char const *argv, t_pipex **data);
 
 // pipex_bonus.c
-void	cmd_forking(t_pipex **data, int cmd_index, int step);
+void	cmd_forking(t_pipex **data, int cmd_index, int step, char *envp[]);
 // void	first_cmd_forking(t_pipex **data, int cmd_index);
 // void	mid_cmd_forking(t_pipex **data, int cmd_index);
 // void	last_cmd_forking(t_pipex **data, int cmd_index);

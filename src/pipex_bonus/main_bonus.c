@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:32:34 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/12 16:13:43 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:06:37 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,30 @@ int	main(int argc, char const *argv[], char *envp[])
 	set_pipes(&data, argc);
 	open_files_fd(&data, argv, argc);
 	i = 3 + data->here_doc;
-	get_cmd(argv[2 + data->here_doc], &data);
-	cmd_forking(&data, i - 3 - data->here_doc, 0);
-	// print_temp(data, i - 2 - data->here_doc);
-	// waitpid(-1, NULL, 0);
+	if (data->files_fd[0] >= 0)
+	{
+		get_cmd(argv[2 + data->here_doc], &data);
+		cmd_forking(&data, i - 3 - data->here_doc, 0, envp);
+		waitpid(-1, NULL, 0);
+	}
+	close(data->pipes[i - 3 - data->here_doc][0]);
+	close(data->pipes[i - 3 - data->here_doc][1]);
+	close(data->pipes[i - 2 - data->here_doc][1]);
 	while (i < argc - 2)
 	{
 		get_cmd(argv[i], &data);
-		cmd_forking(&data, i - 2 - data->here_doc, 1);
-		// print_temp(data, i - 1 - data->here_doc);
-		// waitpid(-1, NULL, 0);
+		cmd_forking(&data, i - 2 - data->here_doc, 1, envp);
+		waitpid(-1, NULL, 0);
+		close(data->pipes[i - 2 - data->here_doc][0]);
+		close(data->pipes[i - 1 - data->here_doc][1]);
 		i++;
 	}
-	get_cmd(argv[argc - 2], &data);
-	cmd_forking(&data, i - 2 - data->here_doc, 2);
-	// print_temp(data, i - 1 - data->here_doc);
-	i = 0;
-	while (i++ < argc)
+	if (data->files_fd[1] >= 0)
+	{
+		get_cmd(argv[argc - 2], &data);
+		cmd_forking(&data, i - 2 - data->here_doc, 2, envp);
 		waitpid(-1, NULL, 0);
+	}
 	end_program(&data, 1);
 }
 

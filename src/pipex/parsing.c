@@ -6,7 +6,7 @@
 /*   By: mgouraud <mgouraud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:45:48 by mgouraud          #+#    #+#             */
-/*   Updated: 2025/02/13 14:33:45 by mgouraud         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:10:46 by mgouraud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,11 @@ void	get_cmd_args(char const *argv, t_pipex **data,
 void	get_cmd_path(char **cmd_path, char **cmd_args, t_pipex **data,
 	char **env_paths)
 {
+	if (cmd_args == NULL || cmd_args[0] == NULL)
+	{
+		*cmd_path = NULL;
+		return ;
+	}
 	if (access(cmd_args[0], X_OK) == 0)
 	{
 		*cmd_path = ft_strdup(cmd_args[0]);

@@ -9,7 +9,7 @@ Pour information, certains exercices pourraient être incorrects. Quelques bugs 
 ---
 # 42-CommonCore_01.2025_Pipex
 
-The goal of this 42 common core project is to create a program able to execute commands in forks and to make them communicate with pipes. It's kind of a preview of an upcoming project in common core rank 3, "Minishell". 
+The goal of this 42 common core project is to create a program able to execute commands in forks and to make them communicate with pipes. It's kind of a preview of an upcoming project in common core rank 3, "[Minishell](https://github.com/MaximeJC/42-Cursus_03.2025_MiniShell)". 
 
 Mandatory project takes 4 arguments: two files (one in, one out) and two commands. A pipe will be used in code between the commands.
 In the bonus part (compile using `make bonus`), you can use more commands, execute more pipes and/or begin with "here_doc" as first argument to use some here_doc instead of the infile, and use the given outfile in append mode. 
